@@ -2,7 +2,7 @@ const itemForm = document.querySelector('#item-form');
 const itemInput = document.querySelector('#item-input');
 const itemsList = document.querySelector('#item-list');
 const clearBtn = document.querySelector('#clear');
-
+const filterItem = document.querySelector('#filter');
 
 // create the list item
 const createLi = (itemText) => {
@@ -43,6 +43,7 @@ const addItem = (e) => {
 
   const li = createLi(itemInput.value);
   itemsList.appendChild(li);
+  checkUI()
   // to clear and focus on input again.
   itemInput.value = '';
   itemInput.focus();
@@ -54,9 +55,11 @@ const removeItem = (e) => {
   const button = e.target.closest('.remove-item');
 
   if (button) {
-    button.parentElement.remove();
+    if (confirm('Are You Sure ?')) {
+      button.parentElement.remove();
+    }
   }
-
+  checkUI();
   // this solution of we added a span as a parent for the i element here the code breaks.
   // if (e.target.parentElement.classList.contains('remove-item')) {
   //   e.target.parentElement.parentElement.remove();
@@ -66,12 +69,29 @@ const removeItem = (e) => {
 // remove all items
 const removeItems = (e) => {
   // this what chatgpt asked me to do as it's more modern and less code to have
-  itemsList.replaceChildren();
+  if (confirm('Are You Sure ?')) {
+    itemsList.replaceChildren();
+  }
+  checkUI();
 
   //perfectly fine to use it but more lines to do
   // while (itemsList.firstChild) {
   //   itemsList.firstChild.remove();
   // }
+}
+
+// checking the UI State to hide filter and clear button if the list is empty
+function checkUI() {
+  // we need to check every time we run the method if there is any lis to validate not in the global scope at all.
+  const items = itemsList.querySelectorAll('li');
+  if (items.length === 0) {
+    clearBtn.style.display = 'none';
+    filterItem.style.display = 'none';
+  }
+  else {
+    clearBtn.style.display = 'block';
+    filterItem.style.display = 'block';
+  }
 }
 
 // event listener on form submit;
@@ -80,3 +100,6 @@ itemForm.addEventListener('submit', addItem);
 itemsList.addEventListener('click', removeItem);
 // event listener to clear all items
 clearBtn.addEventListener('click', removeItems);
+
+// to run after the page loads at the first time.
+checkUI();
