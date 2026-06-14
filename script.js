@@ -14,7 +14,7 @@ const createLi = (itemText) => {
 }
 
 // create the button itself
-const createButton = (classes) => {
+function createButton(classes) {
   const button = document.createElement('button');
   button.className = classes;
   const icon = createIcon('fa-solid fa-xmark')
@@ -23,7 +23,7 @@ const createButton = (classes) => {
 }
 
 // create icon button
-const createIcon = (classes) => {
+function createIcon(classes) {
   const icon = document.createElement('i');
   icon.className = classes;
   return icon;
