@@ -30,7 +30,12 @@ function createIcon(classes) {
   return icon;
 }
 
-
+// displaying items from localstorage on page loading.
+function displayItems() {
+  const itemsFromStorage = getItemsFromLocalStorage();
+  itemsFromStorage.forEach((item) => addItemToDom(item));
+  checkUI();
+}
 // add item function
 const addItemOnSubmit = (e) => {
   e.preventDefault();
@@ -139,14 +144,22 @@ function checkUI() {
   }
 }
 
-// event listener on form submit;
-itemForm.addEventListener('submit', addItemOnSubmit);
-// event listener to delete an item using event delegation.
-itemsList.addEventListener('click', removeItem);
-// event listener to clear all items
-clearBtn.addEventListener('click', removeItems);
-// event listener to filter items
-filterItem.addEventListener('input', itemFilter);
+function init() {
+  // event listener on form submit;
+  itemForm.addEventListener('submit', addItemOnSubmit);
+  // event listener to delete an item using event delegation.
+  itemsList.addEventListener('click', removeItem);
+  // event listener to clear all items
+  clearBtn.addEventListener('click', removeItems);
+  // event listener to filter items
+  filterItem.addEventListener('input', itemFilter);
+  // event listener to load items on page loading
+  document.addEventListener('DOMContentLoaded', displayItems);
 
-// to run after the page loads at the first time.
-checkUI();
+  // to run after the page loads at the first time.
+  checkUI();
+}
+
+init();
+
+
