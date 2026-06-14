@@ -32,21 +32,46 @@ function createIcon(classes) {
 
 
 // add item function
-const addItem = (e) => {
+const addItemOnSubmit = (e) => {
   e.preventDefault();
-  const item = itemInput.value.trim();
-  if (!item) {
+  const itemName = itemInput.value.trim();
+  if (!itemName) {
     alert('Please Add Valid Item');
     itemInput.value = '';
     return;
   }
 
-  const li = createLi(itemInput.value);
-  itemsList.appendChild(li);
-  checkUI()
+  // adding item to dom first
+  addItemToDom(itemName);
+  // adding item to local
+  addItemToLocalStorage(itemName);
+
+
+  checkUI();
   // to clear and focus on input again.
   itemInput.value = '';
   itemInput.focus();
+}
+
+// add item to dom
+function addItemToDom(itemName) {
+  const li = createLi(itemName);
+  itemsList.appendChild(li);
+}
+
+// getting items form localStorage this helper method checked for items if the parse method returned null we return the empty array if it returned data we return that array.
+function getItemsFromLocalStorage() {
+  return JSON.parse(localStorage.getItem('items')) || [];
+}
+
+
+// add item to local storage to fetch it again on reload
+function addItemToLocalStorage(itemName) {
+  const itemsInLocalStorage = getItemsFromLocalStorage();
+
+  itemsInLocalStorage.push(itemName);
+  // local storage stores data in key value pairs so watch out for the keys when adding
+  localStorage.setItem('items', JSON.stringify(itemsInLocalStorage));
 }
 
 // remove one item.
@@ -115,7 +140,7 @@ function checkUI() {
 }
 
 // event listener on form submit;
-itemForm.addEventListener('submit', addItem);
+itemForm.addEventListener('submit', addItemOnSubmit);
 // event listener to delete an item using event delegation.
 itemsList.addEventListener('click', removeItem);
 // event listener to clear all items
