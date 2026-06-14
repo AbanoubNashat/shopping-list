@@ -3,6 +3,8 @@ const itemInput = document.querySelector('#item-input');
 const itemsList = document.querySelector('#item-list');
 const clearBtn = document.querySelector('#clear');
 const filterItem = document.querySelector('#filter');
+const formBtn = itemForm.querySelector('button');
+let editMode = false;
 
 // create the list item
 const createLi = (itemText) => {
@@ -87,8 +89,19 @@ function onClickItem(e) {
     removeItem(item);
     // remove item from localStorage.
     removeItemFromStorage(item.textContent);
+  } else {
+    setItemToEdit(e.target)
   }
 
+}
+
+function setItemToEdit(item) {
+  editMode = true;
+  itemsList.querySelectorAll('li').forEach((item) => item.classList.remove('edit-mode'));
+  item.classList.add('edit-mode');
+  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Update Item';
+  formBtn.style.background = 'green';
+  itemInput.value = item.textContent;
 }
 
 // remove one item from storage.
