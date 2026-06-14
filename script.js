@@ -80,6 +80,26 @@ const removeItems = (e) => {
   // }
 }
 
+// adding filter function
+function itemFilter(e) {
+  const items = itemsList.querySelectorAll('li');
+  const text = e.target.value.toLowerCase();
+  items.forEach(item => {
+    // the best practice is to put the text into a span then querying about it instead of relying on textNodes positions.
+    const itemName = item.textContent.toLowerCase();
+    // if (itemName.includes(text)) {
+    //   item.style.display = 'flex';
+    // }
+    // else {
+    //   item.style.display = 'none';
+    // }
+    //----------------
+    // shorter version.
+    const isMatched = itemName.includes(text);
+    item.style.display = isMatched ? 'flex' : 'none';
+  });
+}
+
 // checking the UI State to hide filter and clear button if the list is empty
 function checkUI() {
   // we need to check every time we run the method if there is any lis to validate not in the global scope at all.
@@ -100,6 +120,8 @@ itemForm.addEventListener('submit', addItem);
 itemsList.addEventListener('click', removeItem);
 // event listener to clear all items
 clearBtn.addEventListener('click', removeItems);
+// event listener to filter items
+filterItem.addEventListener('input', itemFilter);
 
 // to run after the page loads at the first time.
 checkUI();
