@@ -79,15 +79,33 @@ function addItemToLocalStorage(itemName) {
   localStorage.setItem('items', JSON.stringify(itemsInLocalStorage));
 }
 
-// remove one item.
-const removeItem = (e) => {
-  // this what chat told me to follow as a common pattern as it will always targets the button right
-  const button = e.target.closest('.remove-item');
+function onClickItem(e) {
+  if (e.target.closest('.remove-item')) {
+    const button = e.target.closest('.remove-item');
+    const item = button.parentElement;
+    // removing item from the dom
+    removeItem(item);
+    // remove item from localStorage.
+    removeItemFromStorage(item.textContent);
+  }
 
-  if (button) {
-    if (confirm('Are You Sure ?')) {
-      button.parentElement.remove();
-    }
+}
+
+// remove one item from storage.
+function removeItemFromStorage(item) {
+  const itemsInStorage = getItemsFromLocalStorage();
+  const filteredItemsInStorage = itemsInStorage.filter((i) => i !== item);
+  localStorage.setItem('items', JSON.stringify(filteredItemsInStorage));
+}
+
+// remove one item.
+const removeItem = (item) => {
+  // this what chat told me to follow as a common pattern as it will always targets the button right
+  // const button = e.target.closest('.remove-item');
+  // recheck older version for old code to understand the changes here if u wanted.
+
+  if (confirm('Are You Sure ?')) {
+    item.remove();
   }
   checkUI();
   // this solution of we added a span as a parent for the i element here the code breaks.
@@ -100,7 +118,10 @@ const removeItem = (e) => {
 const removeItems = (e) => {
   // this what chatgpt asked me to do as it's more modern and less code to have
   if (confirm('Are You Sure ?')) {
+    // remove all items from Dom
     itemsList.replaceChildren();
+    // remove all items from local storage.
+    localStorage.removeItem('items');
   }
   checkUI();
 
@@ -148,7 +169,7 @@ function init() {
   // event listener on form submit;
   itemForm.addEventListener('submit', addItemOnSubmit);
   // event listener to delete an item using event delegation.
-  itemsList.addEventListener('click', removeItem);
+  itemsList.addEventListener('click', onClickItem);
   // event listener to clear all items
   clearBtn.addEventListener('click', removeItems);
   // event listener to filter items
