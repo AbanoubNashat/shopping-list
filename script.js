@@ -33,14 +33,18 @@ const createIcon = (classes) => {
 // add item function
 const addItem = (e) => {
   e.preventDefault();
-  
-  if (itemInput.value === '') {
+  const item = itemInput.value.trim();
+  if (!item) {
     alert('Please Add Valid Item');
+    itemInput.value = '';
     return;
   }
 
   const li = createLi(itemInput.value);
   itemsList.appendChild(li);
+  // to clear and focus on input again.
+  itemInput.value = '';
+  itemInput.focus();
 }
 
 
