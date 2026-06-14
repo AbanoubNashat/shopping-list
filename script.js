@@ -4,7 +4,7 @@ const itemsList = document.querySelector('#item-list');
 const clearBtn = document.querySelector('#clear');
 const filterItem = document.querySelector('#filter');
 const formBtn = itemForm.querySelector('button');
-let editMode = false;
+let isEditMode = false;
 
 // create the list item
 const createLi = (itemText) => {
@@ -46,6 +46,14 @@ const addItemOnSubmit = (e) => {
     alert('Please Add Valid Item');
     itemInput.value = '';
     return;
+  }
+
+  if (isEditMode) {
+    const itemToEdit = itemsList.querySelector('.edit-mode');
+    removeItemFromStorage(itemToEdit.textContent);
+    itemToEdit.classList.remove('edit-mode');
+    itemToEdit.remove();
+    isEditMode = false;
   }
 
   // adding item to dom first
@@ -96,7 +104,7 @@ function onClickItem(e) {
 }
 
 function setItemToEdit(item) {
-  editMode = true;
+  isEditMode = true;
   itemsList.querySelectorAll('li').forEach((item) => item.classList.remove('edit-mode'));
   item.classList.add('edit-mode');
   formBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Update Item';
@@ -176,6 +184,11 @@ function checkUI() {
     clearBtn.style.display = 'block';
     filterItem.style.display = 'block';
   }
+
+  // reset button after editing the button
+  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+  formBtn.style.backgroundColor = '#333'
+  isEditMode = false;
 }
 
 function init() {
